@@ -7,7 +7,8 @@ let filter = 0;
 let filterSelection = 0;
 function preload(){
   grayFilter = loadShader('webcam.vert', 'webcam.frag');
-  //sharpenFilter = loadShader('webcam.vert', 'sharpen.frag');
+  sharpenFilter = loadShader('webcam.vert', 'sharpen.frag');
+  drawingFilter = loadShader('webcam.vert', 'drawing.frag');
 }
 
 function initVideo() {
@@ -32,20 +33,25 @@ function setup() {
 
 function changeFilter(pase) {
   filter += pase;
-  filterSelection = filter % 2;
+  filterSelection = filter % 3;
 }
 function draw() {
   if (live) {
+  document.getElementById("frameRate").innerHTML = frameRate();
   filterbtn.style('display', 'block');
-    console.log(frameRate());
   switch (filterSelection) {
     case 0:
+    default:
       shader(grayFilter);
       grayFilter.setUniform('tex0', cam);   
       break;
     case 1:
       shader(sharpenFilter);
       sharpenFilter.setUniform('tex0', cam);   
+      break;
+    case 2:
+      shader(drawingFilter);
+      drawingFilter.setUniform('tex0', cam);
       break;
       
   }
